@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title>Conversion WhatsApp -> PDF</title>
+    </head>
+    <body>
+        <h1>Convertisseur WhatsApp vers PDF</h1>
+        <p>Programme permettant de convertir le fichier .txt, généré par la fonction "Exporter discussion", en fichier PDF.</p>
+        <form method="POST" enctype="multipart/form-data" action="w2pdf.php">
+            <input type="file" name="wa" /><br />
+            <input type="submit" value="Convertir" />
+        </form>
+        <h2>Protection des données</h2>
+        <p>Aucune donnée n'est conservée sur le serveur pour la simple et bonne raison que ça ne m'intéresse pas.
+            Si, malgré tout, vous n'avez pas une confiance aveugle, ce qui est raisonnable, vous pouvez me 
+            <a href="mailto:etienne+w2pdf@artnum.ch">contacter</a> pour une installation sur votre propre serveur.
+            Il est possible de mettre en forme le document résultant selon vos propres critères de présentation.
+        </p>
+        <h2>Bugs</h2>
+        <p>Il est possible que des bugs existent, si c'est le cas, vous pouvez envoyer un extrait du fichier texte en prenant soin de changer
+            les noms des intervenants et de remplacer le texte par des X.<br/>
+            Les smileys ne sont pas supportés pour le moment.<br />
+            L'incorporation des images n'est pas supporté pour le moment.
+        </p>
+    </body>
+</html>
