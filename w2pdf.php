@@ -2,33 +2,21 @@
 require('artnum/PDF.php');
 define('FONTNAME', 'LiberationSans');
 
-function remove_emoji($string) {
-    return $string;
-    // Match Emoticons
-    $regex_emoticons = '/[\x{1F600}-\x{1F64F}]/u';
-    $clear_string = preg_replace($regex_emoticons, '~', $string);
-
-    // Match Miscellaneous Symbols and Pictographs
-    $regex_symbols = '/[\x{1F300}-\x{1F5FF}]/u';
-    $clear_string = preg_replace($regex_symbols, '~', $clear_string);
-
-    // Match Transport And Map Symbols
-    $regex_transport = '/[\x{1F680}-\x{1F6FF}]/u';
-    $clear_string = preg_replace($regex_transport, '~', $clear_string);
-
-    // Match Miscellaneous Symbols
-    $regex_misc = '/[\x{2600}-\x{26FF}]/u';
-    $clear_string = preg_replace($regex_misc, '~', $clear_string);
-
-    // Match Dingbats
-    $regex_dingbats = '/[\x{2700}-\x{27BF}]/u';
-    $clear_string = preg_replace($regex_dingbats, '~', $clear_string);
-
-    return $clear_string;
+function shred ($file) {
+    $size = ceil(filesize($file) / 4096);
+    $fp = fopen($file, 'c');
+    if (!$fp) { return; }
+    for ($j = 4; $j > 0; $j--) {
+        fseek($fp, 0, SEEK_SET);
+        for ($i = 0; $i < $size; $i++) {
+            fwrite($fp, openssl_random_pseudo_bytes(4096), 4096);
+        }
+    }
+    fclose($fp);
 }
 
 if (empty($_FILES)) { return; }
-
+if (empty($_FILES['wa'])) { return; }
 
 $fp = fopen($_FILES['wa']['tmp_name'], 'r');
 if (!$fp) { return; }
@@ -71,6 +59,8 @@ while (($line = fgets($fp)) !== FALSE) {
         }
     }
 }
+fclose($fp);
+shred($_FILES['wa']['tmp_name']);
 unlink($_FILES['wa']['tmp_name']);
 
 class WAPDF extends artnum\PDF {
@@ -134,7 +124,7 @@ foreach ($messages as $ts => $msg) {
         $pdf->printLn($m['person'], ['break' => false]);
         $pdf->tab(2);
         $pdf->SetFont(FONTNAME, 'B');
-        $txt = remove_emoji(trim($m['txt']));
+        $txt = trim($m['txt']);
 
         if (strpos($txt, ' ') === FALSE && $pdf->GetStringWidth($txt) > $left) {
             $tmp = '';
