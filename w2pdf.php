@@ -29,13 +29,12 @@ $txt = null;
 $i = 0;
 $msgCount = 0;
 while (($line = fgets($fp)) !== FALSE) {
-    if (preg_match('/^([0-9\.]+)\s.*\s([0-9:]+)\s-\s([^:]+):(.*)$/', $line, $matches)) {
+    if (preg_match('/^([0-9\.]+)\s.*\s([0-9:]+)\s-\s(?:([^:]+):)?(.*)$/', $line, $matches)) {
         $date = $matches[1];
         $time = $matches[2];
         $person = $matches[3];
         $txt = $matches[4];
-        
-        if (!in_array($person, $persons)) {
+        if (!empty($person) && !in_array($person, $persons)) {
             $persons[] = $person;
         }
 
@@ -49,7 +48,7 @@ while (($line = fgets($fp)) !== FALSE) {
         }
         $messages[$ts][$i] = [
             'time' => $time,
-            'person' => $person,
+            'person' => empty($person) ? 'SYSTEM' : $person,
             'txt' => $txt
         ];
         $msgCount++;
