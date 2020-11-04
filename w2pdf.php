@@ -29,7 +29,7 @@ $txt = null;
 $i = 0;
 $msgCount = 0;
 while (($line = fgets($fp)) !== FALSE) {
-    if (preg_match('/^([0-9\.]+)\s.*\s([0-9:]+)\s-\s(?:([^:]+):)?(.*)$/', $line, $matches)) {
+    if (preg_match('/^([0-9\.]+)\s[^-]+\s([0-9:]+)\s-\s(?:([^:]+):)?(.*)$/', $line, $matches)) {
         $date = $matches[1];
         $time = $matches[2];
         $person = $matches[3];
